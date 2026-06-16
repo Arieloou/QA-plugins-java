@@ -21,6 +21,7 @@
 		<pmd.version>7.25.0</pmd.version>
 		<sonar.plugin.version>5.7.0.6970</sonar.plugin.version>
 		<owasp.plugin.version>12.2.2</owasp.plugin.version>
+		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 	<dependencies>
@@ -50,6 +51,29 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven.surefire.plugin.version}</version>
+			</plugin>
+			<!-- JaCoCo - Code coverage reporting -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.plugin.version}</version>
+				<executions>
+					<!-- Instrument classes before tests run -->
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- Generate XML report after tests for SonarQube -->
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<!-- PMD - Análisis estático -->
 			<plugin>
@@ -128,7 +152,7 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>3.5.0</version>
 				<configuration>
-					<mainClass>CManager</mainClass>
+					<mainClass>com.kiroku.ShopManager</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>
